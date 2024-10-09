@@ -1,4 +1,5 @@
 import math
+import sys
 
 def plusMinus(arr):
     length = len(arr)
@@ -474,12 +475,129 @@ def kangaroo(x1, v1, x2, v2):
     print(jumps)
     return "YES" if jumps.is_integer() and jumps > 0 else "NO"
 
+def anagram(s):
+    if len(s) % 2 != 0: 
+        return -1
+
+    letters = list(s)
+
+    n = len(letters)//2
+
+    min = letters[0:n]
+
+    max = letters[n:]
+
+    count = 0
+
+    for letter in min:
+        if letter not in max:
+            count += 1
+        else:
+            max.remove(letter)
+
+
+    return count
+
+# AUMENTA O LIMITE MÁXIMO DO INTEIRO
+sys.set_int_max_str_digits(2147483647)
+def fibonacciModified2(t1, t2, n):
+    if n == 1: 
+        return 0
+    elif n == 2:
+        return 1
+
+    return fibonacciModified2(t1,t2, n-2) + fibonacciModified2(t1,t2,n-1)**2
+
+def fibonacciModified(t1, t2, n):
+
+    table = [t1, t2]
+
+    for i in range(2,n):
+        new_value = table[i-2] + table[i-1]**2
+        table.append(new_value)
+
+    return table.pop()
+
+def bigSorting(unsorted):
+    if len(unsorted) <= 1:
+        return unsorted
+
+    middle = len(unsorted)//2
+
+    left = bigSorting(unsorted[0:middle])
+    right = bigSorting(unsorted[middle:])
+
+    i = 0
+    j = 0
+    sorted = []
+    while i < len(left) and j < len(right):
+
+        if (len(left[i]) < len(right[j])) or (len(left[i]) == len(right[j]) and int(left[i]) <= int(right[j])):
+            sorted.append(left[i])
+            i += 1
+        else:
+            sorted.append(right[j])
+            j += 1
+
+
+    sorted.extend(left[i:])
+    sorted.extend(right[j:])
+    
+    return sorted
+
 def separateNumbers(s):
 
-    numbers = list(s)
-    print(numbers)
-    for n in range(1,len(s)//2+1):
-        print(n)
+    def partitionArr(numbers,get):
+        sequence = []
+        for i in range(0,len(numbers),get):
+            
+            sequence.append("".join(numbers[i:i+get]))
+        return sequence
 
-print(separateNumbers("1234"))
-print(separateNumbers("99100"))
+    def isSequencial(arr):
+        for i in range(len(arr) -1):
+            
+            if int(arr[i]) + 1 != int(arr[i+1]):
+                ## se arr[i] for composto de nove a sequencia tem que ser rearranja para um ordem acima
+                if len(arr[i].replace("9","")) == 0 and (len(arr[i]) == len(arr[i+1])):
+                    
+                    new_arr = list("".join(arr[i+1:]))
+
+                    sequence = [arr[i]] + partitionArr(new_arr,len(arr[i+1]) + 1)
+
+                    return isSequencial(sequence)
+
+                return False
+
+            if arr[i].startswith('0') and len(arr[i]) > 1:
+                return False
+
+        return True
+
+    if len(s) <=1:
+        print("NO")
+        return
+
+    max_length_split = len(s)//2
+
+    numbers = list(s)
+    
+    for take in range(1,max_length_split+1):
+        sequence = partitionArr(numbers,take)
+        
+        if isSequencial(sequence):
+            print("YES " + sequence[0])
+            return
+        
+            
+    print("NO")
+
+
+separateNumbers('1234')
+separateNumbers('91011')
+separateNumbers('99100')
+separateNumbers('101103')
+separateNumbers('010203')
+separateNumbers('13')
+separateNumbers('1')
+separateNumbers('99910001001')

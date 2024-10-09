@@ -592,12 +592,53 @@ def separateNumbers(s):
             
     print("NO")
 
+# Não é um problema de busca binaria, é um problema de dicionario
+def icecreamParlor(m, arr):
 
-separateNumbers('1234')
-separateNumbers('91011')
-separateNumbers('99100')
-separateNumbers('101103')
-separateNumbers('010203')
-separateNumbers('13')
-separateNumbers('1')
-separateNumbers('99910001001')
+    complements = {}
+
+    for i in range(len(arr)):
+
+        if complements.get(m - arr[i]) is not None:
+            return [complements.get(m - arr[i]) + 1, i + 1]
+
+        complements[arr[i]] = i
+
+    return complements
+    
+def queueTwoStacks():
+    queue = []
+    while True:
+        operation = input('').split(" ")
+
+        if operation[0] == '1':
+            queue.append(int(operation[1]))
+        elif operation[0] == '2':
+            queue.pop(0)
+        else: 
+            print(queue[0])
+
+def sherlockAndAnagrams(s):
+    
+    arr = list(s)
+
+    max_take = len(arr)
+
+    possibilites = {}
+    
+    for take in range(1,max_take):
+        for i in range(0,len(arr) + 1 - take):
+            sorted = arr[i:i+take]
+            sorted.sort()
+            string = "".join(sorted)
+
+            if possibilites.get(string) is not None:
+                possibilites[string] += 1
+            else:
+                possibilites[string] = 1
+
+    count = 0
+    for value in possibilites.values():
+        count += (value*(value - 1))//2
+    
+    return count

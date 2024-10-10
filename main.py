@@ -642,3 +642,203 @@ def sherlockAndAnagrams(s):
         count += (value*(value - 1))//2
     
     return count
+
+class Node:
+    def __init__(self,data = None,next = None):
+        self.data = data
+        self.next = next
+
+class LinkedList():
+    def __init__(self):
+        self.head = None
+
+    def print_list(self):
+
+        itr = self.head
+        llstr = ''
+
+        while itr:
+            llstr += str(itr.data) + ' --> '
+
+            itr = itr.next
+
+        print(llstr + 'None')
+
+    def append(self,data):
+        node = Node(data)
+
+        if self.head is None:
+            self.head = node
+            return
+
+        itr = self.head
+
+        while itr.next: 
+            itr = itr.next
+
+        itr.next = node
+
+    def get_lenght(self):
+
+        count = 0
+        itr = self.head
+
+        while itr:
+            count += 1
+            itr = itr.next
+
+        return count
+
+    def find(self, find):
+
+        itr = self.head
+
+        while itr:
+            if itr.data == find:
+                return True
+
+            itr = itr.next
+
+        return False
+
+    def index(self,find):
+        itr = self.head
+        count = 0
+        while itr:
+            if itr.data == find:
+                return count
+
+            itr = itr.next
+            count += 1
+
+        return -1
+
+    def insert_at(self,data,index):
+        if index < 0 or index > self.get_lenght():
+            raise Exception('index is out of range')
+
+        node = Node(data)
+        if index == 0:
+            node.next = self.head
+            self.head = node
+
+        itr = self.head
+        count = 0
+        while count < index - 1:
+            itr = itr.next
+            count += 1
+
+        node.next = itr.next
+        itr.next = node
+
+    def delete_first(self):
+        self.head = self.head.next
+
+
+    def delete_last(self):
+        itr = self.head
+
+        while itr.next.next:
+            itr = itr.next
+
+        itr.next = None
+
+class NodeDouble():
+    def __init__(self, data = None, next=None, previous=None):
+        self.data = data
+        self.next = next
+        self.previous = previous
+
+class DoublyLinkedList():
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def print_list(self):
+        itr = self.head
+
+        dlsrt = ''
+
+        while itr:
+            dlsrt += str(itr.data) + ' <--> '
+            itr = itr.next
+
+        print(dlsrt + 'None')
+
+    def print_inverted(self):
+        itr = self.tail
+
+        dlsrt = ''
+
+        while itr:
+            dlsrt += str(itr.data) + ' <--> '
+            itr = itr.previous
+
+        print(dlsrt + 'None')
+
+    def append(self,data):
+        node = NodeDouble(data)
+
+        if self.head is None:
+            self.head = node
+            self.tail = node
+            return
+
+        itr = self.tail
+
+        itr.next = node
+        node.previous = itr
+        self.tail = node
+
+    def get_length(self):
+        count = 0
+        itr = self.head
+
+        while itr:
+            itr = itr.next
+            count += 1
+
+        return count
+
+    def insert_at_begin(self,data):
+        node = NodeDouble(data)
+
+        if self.head is None:
+            self.head = node
+            self.tail = node
+            return
+
+        itr = self.head
+
+        itr.previous = node
+        node.next = itr
+        self.head = node
+
+    def remove(self,index):
+        if index < 0 or index > self.get_length():
+            raise Exception('index out of range')
+
+        if index == 0:
+            next = self.head.next
+            self.head = next
+            next.previous = None
+            return
+
+        if index == self.get_length() -1:
+            previous = self.tail.previous
+            self.tail = previous
+            previous.next = None
+            return
+
+        itr = self.head
+        count = 0 
+
+        while count < index:
+            count += 1
+            itr = itr.next
+
+        next = itr.next
+        previous = itr.previous
+        previous.next = next
+        next.previous = next
+

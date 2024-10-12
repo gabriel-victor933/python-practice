@@ -643,7 +643,7 @@ def sherlockAndAnagrams(s):
     
     return count
 
-class Node:
+class SinglyLinkedListNode:
     def __init__(self,data = None,next = None):
         self.data = data
         self.next = next
@@ -665,7 +665,7 @@ class LinkedList():
         print(llstr + 'None')
 
     def append(self,data):
-        node = Node(data)
+        node = SinglyLinkedListNode(data)
 
         if self.head is None:
             self.head = node
@@ -717,7 +717,7 @@ class LinkedList():
         if index < 0 or index > self.get_lenght():
             raise Exception('index is out of range')
 
-        node = Node(data)
+        node = SinglyLinkedListNode(data)
         if index == 0:
             node.next = self.head
             self.head = node
@@ -733,7 +733,6 @@ class LinkedList():
 
     def delete_first(self):
         self.head = self.head.next
-
 
     def delete_last(self):
         itr = self.head
@@ -841,4 +840,118 @@ class DoublyLinkedList():
         previous = itr.previous
         previous.next = next
         next.previous = next
+
+def closestNumbers(numbers):
+
+    numbers.sort()
+    
+    diff = [[numbers[0],numbers[1]]]
+    min = abs(numbers[0] - numbers[1])
+    
+    for i in range(1,len(numbers)-1):
+
+        if abs(numbers[i] - numbers[i+1]) < min:
+            min = abs(numbers[i] - numbers[i+1])
+            diff.clear()
+            diff.append([numbers[i],numbers[i+1]])
+        elif  abs(numbers[i] - numbers[i+1]) == min:
+            diff.append([numbers[i],numbers[i+1]])
+
+    
+    for par in diff:
+        print(par[0], par[1])
+
+def minimalOperations(words):
+    
+    result = []
+
+    for word in words:
+        count = 0
+        letters = list(word)
+        for i in range(len(letters)-1):
+            if letters[i] == letters[i+1]:
+                count += 1
+                letters[i+1] = '$'
+
+        result.append(count)
+
+    return result
+
+def getPerfectPairsCount(arr):
+    count = 0
+
+
+
+    for i in range(len(arr)-1):
+        for j in range(i+1,len(arr)):
+            a = abs(arr[i])
+            b = abs(arr[j])
+            abs_sum = abs(arr[i] + arr[j])
+            abs_diff = abs(arr[i] - arr[j])
+
+            if min(abs_diff,abs_sum) <= min(a,b):
+                if max(abs_diff,abs_sum)  >= max(a,b):
+                    count += 1
+
+    return count
+
+###################################
+
+
+def calculateMax(network_nodes, network_from, network_to, frequency):
+    #Criar uma estrutura de dados de grafo
+    graph = {}
+
+    for i in range(1,network_nodes+1):
+        graph[i] = {}
+        graph[i]['frequency'] = frequency[i-1] 
+        graph[i]['vertices'] = []
+
+    for i in range(len(network_from)): 
+        graph[network_from[i]]['vertices'].append(network_to[i])
+        graph[network_to[i]]['vertices'].append(network_from[i])
+
+    # Percorrer essa estrutura de acordo o o critério de diferença de frequencia menor ou igual à 1
+    # NODE: {frequency: 1, vertices: []} 
+
+    def findLongestPath(graph,start_index, previous_frequency,have_been = []):
+        node = graph[start_index]
+        #print(start_index,have_been, node['vertices'])
+        if len(node['vertices']) == 0:
+            return 0
+        
+        if abs(node['frequency'] - previous_frequency) > 1:
+            return 0
+        
+        max = 0
+
+        new_have_been = have_been.copy() + [start_index]
+        
+        for vertice in node['vertices']:
+
+            if vertice in have_been:
+                continue
+
+            path_size = findLongestPath(graph,vertice, previous_frequency,new_have_been)
+            
+            if path_size > max:
+                max = path_size 
+
+        return max + 1
+    
+
+
+    longest_path = 0
+
+    ##iterar sobre o grapho para começar em cada nó
+
+    for index in graph.keys():
+        node = graph[index]
+        length = findLongestPath(graph, index, node['frequency'])
+        
+        longest_path = max(longest_path,length)
+    
+
+    return longest_path -1 
+
 

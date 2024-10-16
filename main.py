@@ -955,3 +955,32 @@ def calculateMax(network_nodes, network_from, network_to, frequency):
     return longest_path -1 
 
 
+def getMinFlips(pwd):
+    letters = list(pwd)
+
+    n = len(letters)
+    min = n + 1
+    for i in range(0,n+1,2):
+        left = letters[:i]
+        right = letters[i:]
+        
+        left_zeros = left.count('0')
+        left_ones = len(left) - left_zeros
+        
+        right_zeros = right.count('0')
+        right_ones = len(right) - right_zeros
+
+        to_flip_1 = (len(left) - left_ones) + (len(right) - right_zeros)
+        to_flip_2 = (len(left) - left_zeros) + (len(right) - right_ones)
+        print(left,right)
+        print(to_flip_1)
+        if to_flip_1 < min: 
+            min = to_flip_1
+        
+        if to_flip_2 < min:
+            min = to_flip_2
+
+    return min
+
+
+print(getMinFlips('1010111101100100001110'))
